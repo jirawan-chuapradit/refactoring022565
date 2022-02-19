@@ -7,7 +7,7 @@ import (
 
 type Play struct {
 	Name string
-	Kind string
+	Kind Kind
 }
 
 type Plays map[string]Play

@@ -30,6 +30,11 @@ type Invoice struct {
 func GetKind(play Play) Kind {
 	return play.Kind
 }
+
+func GetName(play Play) string {
+	return play.Name
+}
+
 func statement(invoice Invoice, plays Plays) string {
 	totalAmount := 0.0
 	volumeCredits := 0.0
@@ -59,7 +64,7 @@ func statement(invoice Invoice, plays Plays) string {
 		// add volume credits
 		volumeCredits += math.Max(float64(perf.Audience-30), 0)
 
-		result += fmt.Sprintf("  %s: $%.2f (%d seats)\n", play.Name, thisAmount/100, perf.Audience)
+		result += fmt.Sprintf("  %s: $%.2f (%d seats)\n", GetName(play), thisAmount/100, perf.Audience)
 		totalAmount += thisAmount
 	}
 	result += fmt.Sprintf("Amount owed is $%.2f\n", totalAmount/100)

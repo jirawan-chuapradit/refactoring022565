@@ -5,10 +5,13 @@ import (
 	"math"
 )
 
-type Plays map[string]struct {
+type Play struct {
 	Name string
-	Kind Kind
+	Kind string
 }
+
+type Plays map[string]Play
+
 type Kind string
 
 const Comedy Kind = "comedy"

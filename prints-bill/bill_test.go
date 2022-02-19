@@ -12,10 +12,10 @@ func TestPrintBill(t *testing.T) {
 			{PlayID: "as-like", Audience: 35},
 			{PlayID: "othello", Audience: 40},
 		}}
-	plays := map[string]map[string]string{
-		"hamlet":  {"name": "Hamlet", "kind": "tragedy"},
-		"as-like": {"name": "As You Like It", "kind": "comedy"},
-		"othello": {"name": "Othello", "kind": "tragedy"},
+	plays := Plays{
+		"hamlet":  {"Hamlet", "tragedy"},
+		"as-like": {"As You Like It", "comedy"},
+		"othello": {"Othello", "tragedy"},
 	}
 
 	bill := statement(inv, plays)

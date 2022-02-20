@@ -33,6 +33,13 @@ type Rate struct {
 	Audience int
 }
 
+type Bill struct {
+	Customer           string
+	Rates              []Rate
+	TotalAmount        float64
+	TotalVolumeCredits float64
+}
+
 func kind(play Play) Kind {
 	return play.Kind
 }
@@ -55,7 +62,6 @@ func volumeCreditsFor(plays Plays, perf Performance) (volumeCredits float64) {
 }
 
 func statement(invoice Invoice, plays Plays) string {
-	result := fmt.Sprintf("Statement for %s\n", invoice.Customer)
 	var rate = []Rate{}
 	for _, perf := range invoice.Performances {
 		play := plays[perf.PlayID]
@@ -68,11 +74,22 @@ func statement(invoice Invoice, plays Plays) string {
 		}
 		rate = append(rate, r)
 	}
-	for _, r := range rate {
+	bill := Bill{
+		Customer:           invoice.Customer,
+		Rates:              rate,
+		TotalAmount:        totalAmount(plays, invoice),
+		TotalVolumeCredits: totalVolumeCredits(plays, invoice),
+	}
+	return printPlanText(bill)
+}
+
+func printPlanText(bill Bill) string {
+	result := fmt.Sprintf("Statement for %s\n", bill.Customer)
+	for _, r := range bill.Rates {
 		result += fmt.Sprintf("  %s: $%.2f (%d seats)\n", r.Play.Name, r.Amount/100, r.Audience)
 	}
-	result += fmt.Sprintf("Amount owed is $%.2f\n", totalAmount(plays, invoice)/100)
-	result += fmt.Sprintf("you earned %.0f credits\n", totalVolumeCredits(plays, invoice))
+	result += fmt.Sprintf("Amount owed is $%.2f\n", bill.TotalAmount/100)
+	result += fmt.Sprintf("you earned %.0f credits\n", bill.TotalVolumeCredits)
 	return result
 }
 

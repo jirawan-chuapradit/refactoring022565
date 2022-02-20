@@ -53,10 +53,11 @@ func playeFor(plays Plays, perf Performance) Play {
 }
 
 func volumeCreditsFor(plays Plays, perf Performance) (volumeCredits float64) {
-	volumeCredits += math.Max(float64(perf.Audience-30), 0)
+	audience := perf.Audience
+	volumeCredits += math.Max(float64(audience-30), 0)
 	// add extra credit for every ten comedy attendees
 	if kind(playeFor(plays, perf)) == Comedy {
-		volumeCredits += math.Floor(float64(perf.Audience / 5))
+		volumeCredits += math.Floor(float64(audience / 5))
 	}
 	return
 }
@@ -108,18 +109,19 @@ func totalAmount(plays Plays, invoice Invoice) (totalAmount float64) {
 }
 
 func AmountFor(plays Plays, perf Performance) (amount float64) {
+	audience := perf.Audience
 	switch kind(playeFor(plays, perf)) {
 	case Tragedy:
 		amount = 40000
-		if perf.Audience > 30 {
-			amount += 1000 * (float64(perf.Audience - 30))
+		if audience > 30 {
+			amount += 1000 * (float64(audience - 30))
 		}
 	case Comedy:
 		amount = 30000
-		if perf.Audience > 20 {
-			amount += 10000 + 500*(float64(perf.Audience-20))
+		if audience > 20 {
+			amount += 10000 + 500*(float64(audience-20))
 		}
-		amount += 300 * float64(perf.Audience)
+		amount += 300 * float64(audience)
 	default:
 		panic(fmt.Errorf("unknow type: %s", kind(playeFor(plays, perf))))
 	}
